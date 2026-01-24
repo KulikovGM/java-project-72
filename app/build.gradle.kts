@@ -17,7 +17,7 @@ plugins {
 //}
 
 application {
-    mainClass = "hexlet.code.Main"
+    mainClass = "hexlet.code.App"
 }
 
 group = "hexlet.code"
