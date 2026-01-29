@@ -1,5 +1,6 @@
-@import org.example.hexlet.dto.MainPage
-@param MainPage page
+@import hexlet.code.util.NamedRoutes
+@import hexlet.code.dto.BasePage
+@param BasePage page
 
 @template.layout.page(
 content = @`
