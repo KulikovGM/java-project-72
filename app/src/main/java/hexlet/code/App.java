@@ -37,8 +37,6 @@ public class App {
 
     public static void main(String[] args) throws IOException, SQLException {
         var app = getApp();
-
-
         app.start(getPort());
     }
 
