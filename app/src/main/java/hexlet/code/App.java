@@ -5,7 +5,11 @@ import com.zaxxer.hikari.HikariDataSource;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
 import gg.jte.resolve.ResourceCodeResolver;
+import hexlet.code.controller.UrlsController;
 import hexlet.code.dto.BasePage;
+import hexlet.code.dto.urls.UrlPage;
+import hexlet.code.repository.BaseRepository;
+import hexlet.code.util.NamedRoutes;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +21,6 @@ import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import hexlet.code.util.NamedRoutes;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
 
@@ -63,17 +66,22 @@ public class App {
         }
 
         BaseRepository.dataSource = dataSource;
+
         var app = Javalin.create(config -> {
             config.bundledPlugins.enableDevLogging();
             config.fileRenderer(new JavalinJte(createTemplateEngine()));
         });
 
-        //app.get("/", ctx -> ctx.result("Hello World"));
         app.get("/", ctx -> {
             var page = new BasePage();
             page.setFlash(ctx.consumeSessionAttribute("flash"));
             ctx.render("index.jte", model("page", page));
         });
+
+        app.get(NamedRoutes.urlsPath(), UrlsController::index);
+
+        app.post(NamedRoutes.urlsPath(), UrlsController::create);
+
         return app;
     }
 
