@@ -75,12 +75,15 @@ public class App {
         app.get("/", ctx -> {
             var page = new BasePage();
             page.setFlash(ctx.consumeSessionAttribute("flash"));
+            page.setFlashType(ctx.consumeSessionAttribute("flash-type"));
             ctx.render("index.jte", model("page", page));
         });
 
         app.get(NamedRoutes.urlsPath(), UrlsController::index);
 
         app.post(NamedRoutes.urlsPath(), UrlsController::create);
+
+        app.get(NamedRoutes.urlPath("{id}"), UrlsController::show);
 
         return app;
     }
