@@ -22,13 +22,16 @@ public class UrlsController {
         var page = new UrlsPage(urls);
         ctx.render("urls/index.jte", model("page", page));
     }
-//
-//    public static void show(Context ctx) {
-//        var id = ctx.pathParamAsClass("id", Long.class).get();
-//        var user = UrlRepository.find(id)
-//                .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
-//        var page = new UrlPage(user);
-//        ctx.render("users/show.jte", model("page", page));
+
+//    public static void show(Context ctx) throws SQLException {
+//        var id = ctx.pathParamAsClass("id", Integer.class).get();
+//        var url = UrlRepository.find(id)
+//                .orElseThrow(() -> new NotFoundResponse("Url with id = " + id + " not found"));
+//        url.setUrlChecks(UrlChecksRepository.getEntities(id));
+//        var page = new UrlPage(url);
+//        page.setFlash(ctx.consumeSessionAttribute("flash"));
+//        page.setFlashType(ctx.consumeSessionAttribute("flash-type"));
+//        ctx.render("urls/show.jte", model("page", page));
 //    }
 
     public static void create(Context ctx) throws SQLException {
