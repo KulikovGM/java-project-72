@@ -30,6 +30,8 @@ repositories {
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.12.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.assertj:assertj-core:3.27.3")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
     implementation("info.picocli:picocli:4.7.7")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.19.0")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2")
@@ -44,7 +46,7 @@ dependencies {
     implementation("org.jsoup:jsoup:1.18.3")
 }
 
-//tasks.test {
-//    useJUnitPlatform()
-//    finalizedBy(tasks.jacocoTestReport)
-//}
+tasks.test {
+    useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
