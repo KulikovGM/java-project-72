@@ -31,7 +31,7 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.12.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testImplementation("org.assertj:assertj-core:3.27.3")
+    testImplementation("org.assertj:assertj-core:4.0.0-M1")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
     implementation("info.picocli:picocli:4.7.7")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.19.0")
@@ -39,12 +39,13 @@ dependencies {
     implementation("gg.jte:jte:3.2.0")
     implementation("org.slf4j:slf4j-simple:2.0.17")
     implementation("io.javalin:javalin:6.6.0")
-    implementation("io.javalin:javalin-bundle:6.6.0")
+    implementation("io.javalin:javalin-bundle:6.7.0")
     implementation("io.javalin:javalin-rendering:6.6.0")
     implementation("com.h2database:h2:2.3.232")
     implementation("com.zaxxer:HikariCP:6.3.0")
     implementation("org.postgresql:postgresql:42.7.5")
     implementation("org.jsoup:jsoup:1.18.3")
+    implementation("com.konghq:unirest-java-core:4.5.1")
 }
 
 tasks.test {

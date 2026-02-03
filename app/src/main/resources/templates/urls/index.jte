@@ -28,6 +28,11 @@ content = @`
                         <td>
                             <a href="${NamedRoutes.urlPath(url.getId())}">${url.getName()}</a>
                         </td>
+                        <td>
+                            @if(page.getLatestUrlsChecks().get(url.getId()) != null)
+                                ${page.getLatestUrlsChecks().get(url.getId()).getStatusCode()}
+                            @endif
+                        </td>
                     </tr>
                 @endfor
             @endif
