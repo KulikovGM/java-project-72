@@ -1,7 +1,11 @@
 package hexlet.code;
 
+import hexlet.code.model.Url;
 import hexlet.code.repository.UrlRepository;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import hexlet.code.util.NamedRoutes;
@@ -31,5 +35,32 @@ public class AppTest {
             assertThat(response.body().string()).contains("Бесплатно проверяйте сайты");
         });
     }
+
+    @Test
+    public void testUrlsPage() {
+        JavalinTest.test(app, (server, client) -> {
+            var response = client.get("/urls");
+            assertThat(response.code()).isEqualTo(200);
+        });
+    }
+
+    @Test
+    public void testUrlPage() {
+        JavalinTest.test(app, (server, client) -> {
+            var url = new Url("https://www.example.com:5432");
+            UrlRepository.save(url);
+            var response = client.get("/urls/" + url.getId());
+            assertThat(response.code()).isEqualTo(200);
+        });
+    }
+
+    @Test
+    void testUrlNotFound() {
+        JavalinTest.test(app, (server, client) -> {
+            var response = client.get("/urls/999999");
+            assertThat(response.code()).isEqualTo(404);
+        });
+    }
+
 }
 
