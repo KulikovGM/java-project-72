@@ -13,26 +13,28 @@ import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
-import java.util.Objects;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
 
 @Slf4j
 public class App {
-    private static int getPort() {
+    public static int getPort() {
         String port = System.getenv().getOrDefault("PORT", "7070");
         return Integer.parseInt(port);
     }
 
-    private static String readResourceFile(String fileName) throws IOException {
-        var inputStream = App.class.getClassLoader().getResourceAsStream(fileName);
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream), StandardCharsets.UTF_8))) {
+    public static String readResourceFile(String fileName) throws IOException {
+        InputStream inputStream = Optional.ofNullable(App.class.getClassLoader().getResourceAsStream(fileName))
+                .orElseThrow(() -> new FileNotFoundException("Resource file not found: " + fileName));
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             return reader.lines().collect(Collectors.joining("\n"));
         }
     }
@@ -42,7 +44,7 @@ public class App {
         app.start(getPort());
     }
 
-    private static TemplateEngine createTemplateEngine() {
+    public static TemplateEngine createTemplateEngine() {
         ClassLoader classLoader = App.class.getClassLoader();
         ResourceCodeResolver codeResolver = new ResourceCodeResolver("templates", classLoader);
         TemplateEngine templateEngine = TemplateEngine.create(codeResolver, ContentType.Html);
@@ -58,7 +60,6 @@ public class App {
 
         var sql = readResourceFile("schema.sql");
 
-        log.info(sql);
         try (var connection = dataSource.getConnection();
              var statement = connection.createStatement()) {
             statement.execute(sql);
@@ -89,6 +90,11 @@ public class App {
         return app;
     }
 
+    public static String getParsedCreatedAt(Timestamp createdAt) {
+        LocalDateTime parsedCreatedAt = createdAt.toLocalDateTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        return parsedCreatedAt.format(formatter);
+    }
 
     public static String getDatabaseUrl() {
         return System.getenv().getOrDefault("JDBC_DATABASE_URL", "jdbc:h2:mem:project;DB_CLOSE_DELAY=-1");

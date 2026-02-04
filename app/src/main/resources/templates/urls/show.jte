@@ -1,3 +1,4 @@
+@import hexlet.code.App
 @import hexlet.code.util.NamedRoutes
 @import hexlet.code.dto.urls.UrlPage
 @param UrlPage page
@@ -20,6 +21,7 @@ content = @`
             </tr>
             <tr>
                 <td>Дата создания</td>
+                <td>${App.getParsedCreatedAt(page.getUrl().getCreatedAt())}</td>
             </tr>
             </tbody>
         </table>
@@ -38,6 +40,32 @@ content = @`
             <th>description</th>
             <th class="col-2">Дата проверки</th>
             </thead>
+            <tbody>
+            @if(!page.getUrl().getUrlChecks().isEmpty())
+                @for(var urlCheck : page.getUrl().getUrlChecks())
+                    <tr>
+                        <td>
+                            ${urlCheck.getId()}
+                        </td>
+                        <td>
+                            ${urlCheck.getStatusCode()}
+                        </td>
+                        <td>
+                            ${urlCheck.getTitle()}
+                        </td>
+                        <td>
+                            ${urlCheck.getH1()}
+                        </td>
+                        <td>
+                            ${urlCheck.getDescription()}
+                        </td>
+                        <td>
+                            ${App.getParsedCreatedAt(urlCheck.getCreatedAt())}
+                        </td>
+                    </tr>
+                @endfor
+            @endif
+            </tbody>
         </table>
     </div>
 `
