@@ -33,34 +33,34 @@ content = @`
 
         <table class="table table-bordered table-hover mt-3">
             <thead>
-            <th class="col-1">ID</th>
-            <th class="col-1">Код ответа</th>
-            <th>title</th>
-            <th>h1</th>
-            <th>description</th>
-            <th class="col-2">Дата проверки</th>
+                <th class="col-1">ID</th>
+                <th class="col-1">Код ответа</th>
+                <th>title</th>
+                <th>h1</th>
+                <th>description</th>
+                <th class="col-2">Дата проверки</th>
             </thead>
             <tbody>
             @if(!page.getUrl().getUrlChecks().isEmpty())
-                @for(var urlCheck : page.getUrl().getUrlChecks())
+                @for(int i = page.getUrl().getUrlChecks().size() - 1; i >= 0; i--)
                     <tr>
                         <td>
-                            ${urlCheck.getId()}
+                            ${page.getUrl().getUrlChecks().get(i).getId()}
                         </td>
                         <td>
-                            ${urlCheck.getStatusCode()}
+                            ${page.getUrl().getUrlChecks().get(i).getStatusCode()}
                         </td>
                         <td>
-                            ${urlCheck.getTitle()}
+                            ${page.getUrl().getUrlChecks().get(i).getTitle()}
                         </td>
                         <td>
-                            ${urlCheck.getH1()}
+                            ${page.getUrl().getUrlChecks().get(i).getH1()}
                         </td>
                         <td>
-                            ${urlCheck.getDescription()}
+                            ${page.getUrl().getUrlChecks().get(i).getDescription()}
                         </td>
                         <td>
-                            ${App.getParsedCreatedAt(urlCheck.getCreatedAt())}
+                            ${App.getParsedCreatedAt(page.getUrl().getUrlChecks().get(i).getCreatedAt())}
                         </td>
                     </tr>
                 @endfor
