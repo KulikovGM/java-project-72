@@ -5,12 +5,18 @@ plugins {
     id("com.github.ben-manes.versions") version "0.52.0"
     id("io.freefair.lombok") version "8.13.1"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    //id("org.sonarqube") version "7.2.2.6593"
+    id("org.sonarqube") version "7.1.0.6387"
 }
 
+sonar {
+    properties {
+        property("sonar.projectKey", "KulikovGM_java-project-72")
+        property("sonar.organization", "kulikovgm")
+    }
+}
 //sonar {
 //    properties {
-//        property("sonar.projectKey", "KulikovGM_java-project-78")
+//        property("sonar.projectKey", "KulikovGM_java-project-72")
 //        property("sonar.organization", "kulikovgm")
 //        // property("sonar.host.url", "https://sonarcloud.io")
 //    }
