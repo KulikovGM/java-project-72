@@ -14,13 +14,6 @@ sonar {
         property("sonar.organization", "kulikovgm")
     }
 }
-//sonar {
-//    properties {
-//        property("sonar.projectKey", "KulikovGM_java-project-72")
-//        property("sonar.organization", "kulikovgm")
-//        // property("sonar.host.url", "https://sonarcloud.io")
-//    }
-//}
 
 application {
     mainClass = "hexlet.code.App"
