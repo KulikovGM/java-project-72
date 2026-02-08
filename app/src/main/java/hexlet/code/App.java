@@ -13,6 +13,7 @@ import hexlet.code.util.NamedRoutes;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
 import lombok.extern.slf4j.Slf4j;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -20,9 +21,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
-import java.sql.Timestamp;import java.time.Instant;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -94,14 +96,7 @@ public class App {
     }
 
     public static String getParsedCreatedAt(Instant createdAt) {
-
         LocalDateTime parsedCreatedAt = LocalDateTime.ofInstant(createdAt, ZoneId.systemDefault());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        return parsedCreatedAt.format(formatter);
-    }
-
-    public static String getParsedCreatedAt(Timestamp createdAt) {
-        LocalDateTime parsedCreatedAt = createdAt.toLocalDateTime();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         return parsedCreatedAt.format(formatter);
     }
