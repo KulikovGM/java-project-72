@@ -20,9 +20,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.Timestamp;import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -59,7 +59,7 @@ public class App {
         var hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(getDatabaseUrl());
 
-        var dataSource = new HikariDataSource(hikariConfig);
+        var dataSource = new HikariDataSource(hikariConfig); //try-catch and close finaly
 
         var sql = readResourceFile("schema.sql");
 
@@ -91,6 +91,13 @@ public class App {
         app.post(NamedRoutes.urlCheckPath("{id}"), UrlsController::check);
 
         return app;
+    }
+
+    public static String getParsedCreatedAt(Instant createdAt) {
+
+        LocalDateTime parsedCreatedAt = LocalDateTime.ofInstant(createdAt, ZoneId.systemDefault());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        return parsedCreatedAt.format(formatter);
     }
 
     public static String getParsedCreatedAt(Timestamp createdAt) {

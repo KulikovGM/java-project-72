@@ -87,22 +87,21 @@ public class UrlsController {
         HttpResponse<String> response;
         try {
             response = Unirest.get(url.getName()).asString();
+            var statusCode = response.getStatus();
+            var body = response.getBody();
+            Document parsedBody = Jsoup.parse(body);
+            String title = parsedBody.title();
+            String h1 = parsedBody.select("h1").text();
+            String description = parsedBody.select("meta[name=description]").attr("content");
+            UrlCheck urlCheck = new UrlCheck(statusCode, title, h1, description, id);
+            UrlChecksRepository.save(urlCheck);
+            ctx.sessionAttribute("flash", "Страница успешно проверена");
+            ctx.sessionAttribute("flash-type", "success");
+            ctx.redirect(NamedRoutes.urlPath(id));
         } catch (UnirestException e) {
             ctx.sessionAttribute("flash", "Некорректный адрес");
             ctx.sessionAttribute("flash-type", "danger");
             ctx.redirect(NamedRoutes.urlPath(id));
-            return;
         }
-        var statusCode = response.getStatus();
-        var body = response.getBody();
-        Document parsedBody = Jsoup.parse(body);
-        String title = parsedBody.title();
-        String h1 = parsedBody.select("h1").text();
-        String description = parsedBody.select("meta[name=description]").attr("content");
-        UrlCheck urlCheck = new UrlCheck(statusCode, title, h1, description, id);
-        UrlChecksRepository.save(urlCheck);
-        ctx.sessionAttribute("flash", "Страница успешно проверена");
-        ctx.sessionAttribute("flash-type", "success");
-        ctx.redirect(NamedRoutes.urlPath(id));
     }
 }

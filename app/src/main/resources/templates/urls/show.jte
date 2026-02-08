@@ -60,7 +60,7 @@ content = @`
                             ${page.getUrl().getUrlChecks().get(i).getDescription()}
                         </td>
                         <td>
-                            ${App.getParsedCreatedAt(page.getUrl().getUrlChecks().get(i).getCreatedAt())}
+                            ${App.getParsedCreatedAt(page.getUrl().getCreatedAt())}
                         </td>
                     </tr>
                 @endfor

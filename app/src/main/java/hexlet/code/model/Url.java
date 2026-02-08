@@ -1,6 +1,6 @@
 package hexlet.code.model;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +12,7 @@ import lombok.Setter;
 public final class Url {
     private int id;
     private String name;
-    private Timestamp createdAt;
+    private Instant createdAt;
     private List<UrlCheck> urlChecks = new ArrayList<>();
 
     public Url(String name) {

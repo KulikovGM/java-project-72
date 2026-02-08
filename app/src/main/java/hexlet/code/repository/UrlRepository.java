@@ -4,7 +4,7 @@ import hexlet.code.model.Url;
 
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,17 +26,19 @@ public class UrlRepository {
     }
 
     public static void save(Url url) throws SQLException {
+        url.setCreatedAt(Instant.now());
         String sql = "INSERT INTO urls (name, created_at) VALUES (?, ?)";
         try (var connection = dataSource.getConnection();
              var preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            var createdAt = Timestamp.valueOf(LocalDateTime.now());
+
+            var createdAt = Timestamp.from(url.getCreatedAt());
             preparedStatement.setString(1, url.getName());
             preparedStatement.setTimestamp(2, createdAt);
             preparedStatement.executeUpdate();
             var generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
                 url.setId(generatedKeys.getInt(1));
-                url.setCreatedAt(createdAt);
+
             } else {
                 throw new SQLException("DB have not returned an id after saving an entity");
             }
@@ -52,7 +54,7 @@ public class UrlRepository {
             while (resultSet.next()) {
                 var id = resultSet.getInt("id");
                 var name = resultSet.getString("name");
-                var createdAt = resultSet.getTimestamp("created_at");
+                var createdAt = resultSet.getTimestamp("created_at").toInstant();
                 var url = new Url(name);
                 url.setId(id);
                 url.setCreatedAt(createdAt);
@@ -70,7 +72,7 @@ public class UrlRepository {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 var name = resultSet.getString("name");
-                var createdAt = resultSet.getTimestamp("created_at");
+                var createdAt = resultSet.getTimestamp("created_at").toInstant();
                 var url = new Url(name);
                 url.setId(id);
                 url.setCreatedAt(createdAt);
