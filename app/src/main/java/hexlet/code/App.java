@@ -29,7 +29,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
-
+@SuppressWarnings("java:S2095")
 @Slf4j
 public class App {
     public static int getPort() {
@@ -61,16 +61,17 @@ public class App {
         var hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(getDatabaseUrl());
 
-        try (var dataSource = new HikariDataSource(hikariConfig)) {
-            var sql = readResourceFile("schema.sql");
+        var dataSource = new HikariDataSource(hikariConfig); //try-catch and close finaly
 
-            try (var connection = dataSource.getConnection();
-                 var statement = connection.createStatement()) {
-                statement.execute(sql);
-            }
+        var sql = readResourceFile("schema.sql");
 
-            BaseRepository.dataSource = dataSource;
+        try (var connection = dataSource.getConnection();
+             var statement = connection.createStatement()) {
+            statement.execute(sql);
         }
+
+        BaseRepository.dataSource = dataSource;
+
         var app = Javalin.create(config -> {
             config.bundledPlugins.enableDevLogging();
             config.fileRenderer(new JavalinJte(createTemplateEngine()));
