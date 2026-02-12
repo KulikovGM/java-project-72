@@ -28,12 +28,14 @@ import static io.javalin.rendering.template.TemplateUtil.model;
  * UrlsController.
  */
 public class UrlsController {
+    private static final String ACTION_1 = "flash";
+    private static final String ACTION_2 = "flash-type";
     public static void index(Context ctx) throws SQLException {
         var urls = UrlRepository.getEntities();
         var latestUrlsChecks = UrlChecksRepository.getLatestUrlsChecks();
         var page = new UrlsPage(urls, latestUrlsChecks);
-        page.setFlash(ctx.consumeSessionAttribute("flash"));
-        page.setFlashType(ctx.consumeSessionAttribute("flash-type"));
+        page.setFlash(ctx.consumeSessionAttribute(ACTION_1));
+        page.setFlashType(ctx.consumeSessionAttribute(ACTION_2));
         ctx.render("urls/index.jte", model("page", page));
     }
 
@@ -43,8 +45,8 @@ public class UrlsController {
                 .orElseThrow(() -> new NotFoundResponse("Url with id = " + id + " not found"));
         url.setUrlChecks(UrlChecksRepository.getEntities(id));
         var page = new UrlPage(url);
-        page.setFlash(ctx.consumeSessionAttribute("flash"));
-        page.setFlashType(ctx.consumeSessionAttribute("flash-type"));
+        page.setFlash(ctx.consumeSessionAttribute(ACTION_1));
+        page.setFlashType(ctx.consumeSessionAttribute(ACTION_2));
         ctx.render("urls/show.jte", model("page", page));
     }
 
@@ -55,8 +57,8 @@ public class UrlsController {
             var uri = new URI(inputUrl);
             parsedUrl = uri.toURL();
         } catch (Exception e) {
-            ctx.sessionAttribute("flash", "Некорректный URL");
-            ctx.sessionAttribute("flash-type", "danger");
+            ctx.sessionAttribute(ACTION_1, "Некорректный URL");
+            ctx.sessionAttribute(ACTION_2, "danger");
             ctx.redirect("/");
             return;
         }
@@ -71,11 +73,11 @@ public class UrlsController {
         if (!UrlRepository.existsByName(normalizedUrl)) {
             Url url = new Url(normalizedUrl);
             UrlRepository.save(url);
-            ctx.sessionAttribute("flash", "Страница успешно добавлена");
-            ctx.sessionAttribute("flash-type", "success");
+            ctx.sessionAttribute(ACTION_1, "Страница успешно добавлена");
+            ctx.sessionAttribute(ACTION_2, "success");
         } else {
-            ctx.sessionAttribute("flash", "Страница уже существует");
-            ctx.sessionAttribute("flash-type", "info");
+            ctx.sessionAttribute(ACTION_1, "Страница уже существует");
+            ctx.sessionAttribute(ACTION_2, "info");
         }
         ctx.redirect(NamedRoutes.urlsPath());
     }
@@ -95,12 +97,12 @@ public class UrlsController {
             String description = parsedBody.select("meta[name=description]").attr("content");
             UrlCheck urlCheck = new UrlCheck(statusCode, title, h1, description, id);
             UrlChecksRepository.save(urlCheck);
-            ctx.sessionAttribute("flash", "Страница успешно проверена");
-            ctx.sessionAttribute("flash-type", "success");
+            ctx.sessionAttribute(ACTION_1, "Страница успешно проверена");
+            ctx.sessionAttribute(ACTION_2, "success");
             ctx.redirect(NamedRoutes.urlPath(id));
         } catch (UnirestException e) {
-            ctx.sessionAttribute("flash", "Некорректный адрес");
-            ctx.sessionAttribute("flash-type", "danger");
+            ctx.sessionAttribute(ACTION_1, "Некорректный адрес");
+            ctx.sessionAttribute(ACTION_2, "danger");
             ctx.redirect(NamedRoutes.urlPath(id));
         }
     }
