@@ -5,7 +5,7 @@
     id("com.github.ben-manes.versions") version "0.52.0"
     id("io.freefair.lombok") version "8.13.1"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-     id "org.sonarqube" version "7.1.0.6387"
+     id ("org.sonarqube") version "7.1.0.6387"
 }
 
  sonar {
