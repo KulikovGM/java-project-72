@@ -57,6 +57,7 @@ class AppTest {
             assertThat(response.code()).isEqualTo(404);
         });
     }
+
     @Test
     void testUrlCreate() {
         JavalinTest.test(app, (server, client) -> {
@@ -67,5 +68,29 @@ class AppTest {
         });
     }
 
+    @Test
+    void testDuplicateUrlCreate() throws SQLException {
+
+        UrlRepository.save(new Url("https://example.com"));
+        JavalinTest.test(app, (server, client) -> {
+            var requestBody = "url=https://example.com";
+            var response = client.post(NamedRoutes.urlsPath(), requestBody);
+            assertThat(response.code()).isEqualTo(200);
+            client.post(NamedRoutes.urlsPath(), requestBody);
+            var allUrls = UrlRepository.getEntities();
+            assertThat(allUrls).hasSize(1);
+        });
+    }
+
+    @Test
+    void testUrlWithoutProtocolCreate() throws SQLException {
+        JavalinTest.test(app, (server, client) -> {
+            var requestBody = "url=example.com";
+            var response = client.post(NamedRoutes.urlsPath(), requestBody);
+            assertThat(response.code()).isEqualTo(200);
+            var allUrls = UrlRepository.getEntities();
+            assertThat(allUrls).isEmpty();
+        });
+    }
 }
 
