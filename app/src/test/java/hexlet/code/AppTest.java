@@ -57,6 +57,15 @@ class AppTest {
             assertThat(response.code()).isEqualTo(404);
         });
     }
+    @Test
+    void testUrlCreate() {
+        JavalinTest.test(app, (server, client) -> {
+            var link = "url=https://www.example.com:5432/12345";
+            var response = client.post(NamedRoutes.urlsPath(), link);
+            assertThat(response.code()).isEqualTo(200);
+            assertThat(response.body().string()).contains("https://www.example.com:5432");
+        });
+    }
 
 }
 
