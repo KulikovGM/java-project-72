@@ -61,17 +61,16 @@ public class App {
         var hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(getDatabaseUrl());
 
-        var dataSource = new HikariDataSource(hikariConfig); //try-catch and close finaly
+        try (var dataSource = new HikariDataSource(hikariConfig)) {
+            var sql = readResourceFile("schema.sql");
 
-        var sql = readResourceFile("schema.sql");
+            try (var connection = dataSource.getConnection();
+                 var statement = connection.createStatement()) {
+                statement.execute(sql);
+            }
 
-        try (var connection = dataSource.getConnection();
-             var statement = connection.createStatement()) {
-            statement.execute(sql);
+            BaseRepository.dataSource = dataSource;
         }
-
-        BaseRepository.dataSource = dataSource;
-
         var app = Javalin.create(config -> {
             config.bundledPlugins.enableDevLogging();
             config.fileRenderer(new JavalinJte(createTemplateEngine()));
