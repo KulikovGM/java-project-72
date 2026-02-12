@@ -37,24 +37,24 @@ class MockTest {
     }
 
     @BeforeAll
-    public static void beforeAll() throws IOException {
+    static void beforeAll() throws IOException {
         mockServer = new MockWebServer();
         mockServer.enqueue(new MockResponse().setBody(readFixture("index.jte")));
         testUrlName = mockServer.url("/").toString();
     }
 
     @AfterAll
-    public static void afterAll() throws IOException {
+    static void afterAll() throws IOException {
         mockServer.close();
     }
 
     @BeforeEach
-    public final void beforeEach() throws SQLException, IOException {
+    final void beforeEach() throws SQLException, IOException {
         app = App.getApp();
     }
 
     @Test
-    public void testUrlCheckCreate() {
+    void testUrlCheckCreate() {
         JavalinTest.test(app, (server, client) -> {
             var url = new Url(testUrlName);
             UrlRepository.save(url);

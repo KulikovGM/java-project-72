@@ -14,17 +14,17 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class AppTest {
+class AppTest {
 
     private Javalin app;
 
     @BeforeEach
-    public final void setUp() throws IOException, SQLException {
+    final void setUp() throws IOException, SQLException {
         app = App.getApp();
     }
 
     @Test
-    public void testMainPage() {
+    void testMainPage() {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get(NamedRoutes.rootPath());
             assertThat(response.code()).isEqualTo(200);
@@ -33,7 +33,7 @@ public class AppTest {
     }
 
     @Test
-    public void testUrlsPage() {
+    void testUrlsPage() {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls");
             assertThat(response.code()).isEqualTo(200);
@@ -41,7 +41,7 @@ public class AppTest {
     }
 
     @Test
-    public void testUrlPage() {
+    void testUrlPage() {
         JavalinTest.test(app, (server, client) -> {
             var url = new Url("https://www.example.com:5432");
             UrlRepository.save(url);
