@@ -10,8 +10,8 @@
 
  sonar {
      properties {
-         property "sonar.projectKey", "KulikovGM_java-project-72"
-         property "sonar.organization", "kulikovgm"
+         property("sonar.projectKey", "KulikovGM_java-project-72")
+         property("sonar.organization", "kulikovgm")
      }
  }
 
